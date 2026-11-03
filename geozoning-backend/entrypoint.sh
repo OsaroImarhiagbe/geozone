@@ -23,21 +23,7 @@ done
 
 echo "PostgreSQL service is ready on  $HOST:$PORT! Continuing...."
 
-# Show pending migrations before applying (great for debugging)
-echo "📋 Pending migrations:"
-uv run alembic history --indicate-current
 
-echo "🚀 Running Alembic migrations..."
-
-if uv run alembic upgrade head; then
-    echo "✅ Migrations applied successfully."
-else
-    echo "❌ Migration failed. Container kept alive for debugging."
-    echo "   → Inspect:  docker compose exec backend alembic history --indicate-current"
-    echo "   → Rollback: docker compose exec backend alembic downgrade -1"
-    echo "   → Check:    docker compose exec backend alembic current"
-    while true; do sleep 3600; done
-fi
 
 echo "🟢 Starting FastAPI server..."
 exec uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

@@ -6,9 +6,9 @@ from geoalchemy2 import Geometry
 from app.infrastructure.db.base_models.base import Base
 
 
-class Zoning_Parcels_Table(Base):
+class Parcels_Table(Base):
 
-    __tablename__ = "zoning_parcels"
+    __tablename__ = "parcels"
 
     id:Mapped[UUID] = mapped_column(primary_key=True, index=True,unique=True,server_default=func.gen_random_uuid(),comment="Id of parcel") ## this is using v4 uuid
 

@@ -1,18 +1,28 @@
-'use client'
-import { MutationCache, QueryClient,QueryClientProvider } from '@tanstack/react-query'
-import type { PropsWithChildren } from 'react'
+"use client";
+import {
+  MutationCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { type PropsWithChildren, useState } from "react";
 
-
-const queryClient = new QueryClient({
-    mutationCache: new MutationCache({
+export const QueryContextProvider = ({ children }: PropsWithChildren) => {
+  const [client] = useState(() => {
+    return new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 60 * 1000, // 1 min
+          refetchOnWindowFocus: false,
+        },
+      },
+      mutationCache: new MutationCache({
         onError: (error) => {
-            // Global error handling for mutations (e.g., POST/PUT requests)
-            console.log(error)
-        }
-    })
-})
+          // Global error handling for mutations (e.g., POST/PUT requests)
+          console.log(error);
+        },
+      }),
+    });
+  });
 
-export const QueryContextProvider = ({children}:PropsWithChildren) => {
-
-    return (<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>)
-}
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+};

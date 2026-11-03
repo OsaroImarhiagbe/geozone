@@ -28,19 +28,25 @@ class Settings(BaseSettings):
     #postgres db
     postgresql_port:int
     alembic_postgres_user: str
-    fastapi_postgres_user:str
+    
+    geozone_authenticated_postgres_user:str
+    geozone_anon_postgres_user:str
+
     postgres_password: SecretStr
     postgres_db:str
     postgres_host:str
 
-    # Alembic Database url
+    # Alembic Database url -> Root User
     def alembic_database_url_sync(self) -> str:
         return f"postgresql+psycopg2://{self.alembic_postgres_user}:{self.postgres_password.get_secret_value()}@{self.postgres_host}:{self.postgresql_port}/{self.postgres_db}"
     
-    # FastAPI Database url
-    def fastapi_database_url(self) -> str:
-        return f"postgresql+asyncpg://{self.fastapi_postgres_user}:{self.postgres_password.get_secret_value()}@{self.postgres_host}:{self.postgresql_port}/{self.postgres_db}"
-    
+    # FastAPI Database url -> Authenticated User
+    def authenticated_database_url(self) -> str:
+        return f"postgresql+asyncpg://{self.geozone_authenticated_postgres_user}:{self.postgres_password.get_secret_value()}@{self.postgres_host}:{self.postgresql_port}/{self.postgres_db}"
+
+    # FastAPI Database url -> Anonymous User
+    def anonymous_database_url(self) -> str:
+        return f"postgresql+asyncpg://{self.geozone_anon_postgres_user}:{self.postgres_password.get_secret_value()}@{self.postgres_host}:{self.postgresql_port}/{self.postgres_db}"
 
     # Configuration for the model
     model_config = SettingsConfigDict(

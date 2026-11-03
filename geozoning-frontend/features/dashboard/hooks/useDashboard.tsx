@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { ZoningServiceAPI } from "../api/zone";
+import { ParcelService } from "../service/parcel";
 import axios from "axios";
 const key = process.env.NEXT_PUBLIC_MAP_BOX_KEY;
 export const useGetParcels = (
@@ -12,7 +12,7 @@ export const useGetParcels = (
     // Include bbox in key so query refetches when user pans/zooms
     queryKey: ["parcels", min_lng, min_lat, max_lng, max_lat],
     queryFn: async () => {
-      const response = await ZoningServiceAPI.get_parcel(
+      const response = await ParcelService.get_parcel(
         min_lng,
         min_lat,
         max_lng,

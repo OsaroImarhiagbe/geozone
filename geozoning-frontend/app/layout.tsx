@@ -33,9 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <SidebarProvider>
               <AppSidebar />
               <SidebarInset>
-                <header className="flex h-[72px] shrink-0 items-center justify-between gap-2 px-4 bg-[#0B1726]">
-                  <DashboardHeader />
-                </header>
+                <DashboardHeader />
                 <main className="min-h-screen w-full">{children}</main>
               </SidebarInset>
             </SidebarProvider>

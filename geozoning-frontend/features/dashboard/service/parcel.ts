@@ -1,6 +1,6 @@
 import { api } from "@/api/apiClient";
 import { ParcelResponse } from "../type/types";
-export const ZoningServiceAPI = {
+export const ParcelService = {
   get_parcel: async (
     min_lng: number,
     min_lat: number,

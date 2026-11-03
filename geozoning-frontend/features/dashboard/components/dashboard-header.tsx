@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, Sun } from "lucide-react";
 export default function DashboardHeader() {
   return (
-    <>
+    <header className="flex h-[72px] shrink-0 items-center justify-between gap-2 px-4 bg-[#0B1726]">
       <div className="flex items-center gap-6">
         <span className="text-md font-medium text-[#64748B] font-mono">
           Real Estate Intelligence
@@ -41,6 +41,6 @@ export default function DashboardHeader() {
           <ChevronDown className="h-4 w-4 text-slate-400" />
         </button>
       </div>
-    </>
+    </header>
   );
 }

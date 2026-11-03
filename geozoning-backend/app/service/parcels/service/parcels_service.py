@@ -1,13 +1,13 @@
-from app.service.zoning.infrastructure.zoning_dal.zoning_dal import ZoningRepository
-from app.service.zoning.schemas.zoning_schema import ParcelResponse, ParcelFeatureCollection
+from app.service.parcels.infrastructure.parcels.parcels_dal import ParcelsRepository
+from app.service.parcels.schemas.zoning_schema import ParcelResponse, ParcelFeatureCollection
 from fastapi import status
 
-class ZoningService:
+class ParcelsService:
     """
     Service handles zoning for the AOI
     """
 
-    def __init__(self,repo: ZoningRepository):
+    def __init__(self,repo: ParcelsRepository):
         self.__repo = repo
 
     async def zones(self,min_lng: float,min_lat: float,max_lng: float,max_lat: float) -> ParcelResponse:
