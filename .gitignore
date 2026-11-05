@@ -1,14 +1,13 @@
-geozoning-backend/.venv
-/geozoning/*/__pycache__/
+geozone-backend/.venv
+/geozone/*/__pycache__/
 __pycache__/
 
-/geozoning-backend/.env.*
-/geozoning-frontend/.env.*
+/geozone-backend/.env.*
+/geozone-frontend/.env.*
 
 .env.*
 .env*
 
 secrets/
 data/
-Notes.txt
-/geozoning-frontend/public/RealEstate_Parcels.geojson
+Notes.txtgeozone-frontend/public/RealEstate_Parcels.geojson

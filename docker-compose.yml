@@ -56,15 +56,15 @@ services:
 
   backend:
     build:
-      context: ./geozoning-backend
+      context: ./geozone-backend
       dockerfile: Dockerfile
     container_name: geozoning-app-backend
     ports:
       - "8000:8000"
     volumes:
-      - ./geozoning-backend:/app
+      - ./geozone-backend:/app
     env_file:
-      - ./geozoning-backend/.env.development
+      - ./geozone-backend/.env.development
     secrets:
       - POSTGRES_PASSWORD
     restart: always
