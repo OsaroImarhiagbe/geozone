@@ -4,8 +4,8 @@ from fastapi import status
 from passlib.context import CryptContext
 
 from app.core.config import settings
-from app.modules.auth.infrastructure.auth_dal.auth_dal import AuthRepositories
-from app.modules.auth.schemas.auth import (
+from app.service.auth.infrastructure.auth_dal.auth_dal import AuthRepositories
+from app.service.auth.schemas.auth import (
     LoginRequest,
     RegisterRequest,
     Token,
@@ -17,7 +17,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import uuid4
 
-from jose import jwt
+
 
 from app.core.config import settings
 

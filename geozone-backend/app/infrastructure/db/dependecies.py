@@ -6,20 +6,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.infrastructure.db.session import ( AuthSessionLocal,AnonSessionLocal)
 from collections.abc import AsyncGenerator
-# from app.middleware.dependencies import get_current_user_id
+from app.middleware.dependencies import get_authenticated_user
 
-# get_current_user_id_dependency = Annotated[str,Depends(get_current_user_id)]
 
-# Public — registration, login, refresh
-# async def get_db():
-#     async with AsyncSessionLocal() as session:
-#         try:
-#             yield session
-#         except Exception:
-#             await session.rollback()
-#             raise
-#         finally:
-#             await session.close()
+
+
+
+
 
 # Protected — all authenticated routes
 async def get_auth_db() -> AsyncGenerator[AsyncSession,None]:
@@ -39,6 +32,7 @@ async def get_auth_db() -> AsyncGenerator[AsyncSession,None]:
     # )
 # user_id:get_current_user_id_dependency
 
+## Public routes, temporay access
 async def get_anon_db() -> AsyncGenerator[AsyncSession,None]:
       async with AnonSessionLocal() as session:
              try:
@@ -48,4 +42,19 @@ async def get_anon_db() -> AsyncGenerator[AsyncSession,None]:
                  raise
              finally:
                  await session.close()
+
+async def get_db(current_user = Depends(get_authenticated_user)) -> AsyncGenerator[AsyncSession, None]:
+     session_factory = AuthSessionLocal if current_user else AnonSessionLocal
+
+     async with session_factory as session:
+          yield session
+
+    # async with AsyncSessionLocal() as session:
+    #     try:
+    #         yield session
+    #     except Exception:
+    #         await session.rollback()
+    #         raise
+    #     finally:
+    #         await session.close()
      

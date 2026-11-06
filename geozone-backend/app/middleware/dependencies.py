@@ -2,13 +2,12 @@ from datetime import datetime
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError
 from pydantic import ValidationError
 
 from app.core.config import settings
-from app.middleware.jwt import decode_token
-from app.modules.auth.schemas.auth import TokenPayload
+from app.service.auth.schemas.auth import TokenPayload
 from app.service.auth.service.auth_service import AuthService
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.api_v1_str}/auth/login")
 
@@ -18,7 +17,7 @@ async def get_authenticated_user(token:str = Depends(oauth2_scheme)):
     try:
         payload = AuthService.decode_token(token)
         # if invalid token
-        if not payload:
+        if payload is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",
@@ -33,10 +32,10 @@ async def get_authenticated_user(token:str = Depends(oauth2_scheme)):
             )
         
         return payload
-    except (JWTError, ValidationError):
+    except ValidationError as e:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate credentials",
+            detail=str(e),
             headers={"WWW-Authenticate": "Bearer"},
         )
         
@@ -52,7 +51,7 @@ def get_current_user_with_roles(required_roles:list[str] | None = None) -> calla
     ## privatr function
     def _inner(token: str = Depends(oauth2_scheme)) -> str:
         try:
-            payload = decode_token(token)
+            payload = AuthService.decode_token(token)
             token_data = TokenPayload(**payload)
             # Check token expiration
             if datetime.fromtimestamp(token_data.exp) < datetime.now():
