@@ -7,7 +7,7 @@ export const ParcelService = {
     max_lng: number,
     max_lat: number,
   ) => {
-    const response = await api.get<ParcelResponse>("/zoning/parcels", {
+    const response = await api.get<ParcelResponse>("/parcels/bbox", {
       params: {
         min_lng: min_lng,
         min_lat: min_lat,

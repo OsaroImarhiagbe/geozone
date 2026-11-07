@@ -6,7 +6,7 @@ export default function QuickAction({
   description,
   active = false,
 }: {
-  icon: React.ElementType;
+  icon?: React.ElementType;
   title: string;
   description: string;
   active?: boolean;
@@ -23,7 +23,7 @@ export default function QuickAction({
             active ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-600"
           }`}
         >
-          <Icon className="h-5 w-5" />
+          {/* <Icon className="h-5 w-5" /> */}
         </div>
 
         <div>

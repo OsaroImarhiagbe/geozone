@@ -30,26 +30,26 @@ export default function DashboardScreen() {
         {/* Quick Actions */}
         <section className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <QuickAction
-            icon={Target}
+            // icon={Target}
             title="Select AOI"
             description="Draw, upload, or search for an area"
             active
           />
 
           <QuickAction
-            icon={Building2}
+            // icon={Building2}
             title="Get Zoning Summary"
             description="View zoning, land use, and development rules"
           />
 
           <QuickAction
-            icon={Bookmark}
+            // icon={Bookmark}
             title="Save & Organize"
             description="Save AOIs for later or add to a project"
           />
 
           <QuickAction
-            icon={ArrowDownToLine}
+            // icon={ArrowDownToLine}
             title="Export Report"
             description="Download data and share with your team"
           />

@@ -52,12 +52,14 @@ export default function Map() {
     location.latitude ?? 38.8048,
   ];
   // Fetch parcels — refetches when bbox changes
-  // const { data: parcelData } = useGetParcels(
-  //   min_lng,
-  //   min_lat,
-  //   max_lng,
-  //   max_lat,
-  // );
+  const { data: parcelData } = useGetParcels(
+    min_lng,
+    min_lat,
+    max_lng,
+    max_lat,
+  );
+
+  console.log("Parcel Data", parcelData);
 
   useEffect(() => {
     const container = mapContainerRef.current;
@@ -99,7 +101,7 @@ export default function Map() {
       // Add empty parcel source — data gets added once fetched
       mapRef.current?.addSource("alexandria", {
         type: "geojson",
-        data: "/RealEstate_Parcels.geojson",
+        data: parcelData,
       });
 
       // Fill layer — colors parcel interiors by zone_code
