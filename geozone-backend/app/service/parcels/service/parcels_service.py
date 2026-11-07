@@ -1,5 +1,5 @@
 from app.service.parcels.infrastructure.parcels.parcels_dal import ParcelsRepository
-from app.service.parcels.schemas.zoning_schema import ParcelResponse, ParcelFeatureCollection
+from app.service.parcels.schemas.parcel_schema import ParcelResponse, ParcelFeatureCollection
 from fastapi import status
 
 class ParcelsService:
@@ -16,7 +16,10 @@ class ParcelsService:
         """
         response = await self.__repo.find_parcels_by_bbox(min_lng=min_lng,min_lat=min_lat,max_lng=max_lng,max_lat=max_lat)
 
-        print("response:", response)
+        if response is None:
+            raise LookupError
+
+        print("parcel service response:", response)
         return ParcelResponse(
             status=status.HTTP_200_OK,
             error="",

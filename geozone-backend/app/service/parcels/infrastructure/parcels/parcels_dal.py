@@ -25,4 +25,5 @@ class ParcelsRepository:
         )
 
         result = await self.__db.execute(stmt)
-        return result.scalars().all()
+
+        return list(result.scalars().all())

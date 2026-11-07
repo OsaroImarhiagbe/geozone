@@ -33,5 +33,4 @@ async def get_parcels_service(current_user = Depends(get_authenticated_user)) ->
     else:
         db_generator = get_anon_db()
 
-    async for db in db_generator:
-        yield build_parcels_service(db)
+    return build_parcels_service(db_generator)

@@ -39,8 +39,8 @@ async def get_authenticated_user(token:str = Depends(oauth2_scheme)):
             headers={"WWW-Authenticate": "Bearer"},
         )
         
-async def get_current_user_id(current_user = Depends(get_current_user)) -> str:
-    return str(current_user['sub'])
+# async def get_current_user_id(current_user = Depends(get_current_user)) -> str:
+#     return str(current_user['sub'])
 
 def get_current_user_with_roles(required_roles:list[str] | None = None) -> callable:
     """
@@ -72,10 +72,10 @@ def get_current_user_with_roles(required_roles:list[str] | None = None) -> calla
                     headers={"WWW-Authenticate": "Bearer"},
                 )
             return token_data.sub
-        except (JWTError, ValidationError):
+        except ValidationError as e:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Could not validate credentials",
+                detail=str(e),
                 headers={"WWW-Authenticate": "Bearer"},
             )
     return _inner

@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status, Query
 from typing import Annotated
-from app.service.parcels.schemas.zoning_schema import ZoningQuery
+from app.service.parcels.schemas.parcel_schema import (ZoningQuery, ParcelResponse)
 from app.service.parcels.service.parcels_service import ParcelsService
-from app.service.parcels.service.dependencies import get_parcels_service
-from app.service.parcels.schemas.zoning_schema import ParcelResponse
-router = APIRouter(tags=["zoning"])
+from app.service.parcels.service.dependencies import get_anon_parcels_service
+
+
+router = APIRouter(tags=["parcels"])
 
 #`GET /api/zoning/parcels?min_lng=-77.12&min_lat=38.78&max_lng=-77.01&max_lat=38.85`
 ## client is passing current mapbox bounding arrays as parameters
@@ -32,9 +33,9 @@ router = APIRouter(tags=["zoning"])
 # To Do: Finish out refresh token endpoint and register user endpoint
 
 
-get_parcels_service_dependency = Annotated[ParcelsService, Depends(get_parcels_service)]
+get_parcels_service_dependency = Annotated[ParcelsService, Depends(get_anon_parcels_service)]
 
-@router.get('/',response_model=ParcelResponse,tags=['parcels'])
+@router.get('/bbox',response_model=ParcelResponse,tags=['parcels'])
 async def get_zones(service: get_parcels_service_dependency, filter_query: Annotated[ZoningQuery, Query()]) -> ParcelResponse:
     """
     Endpoint is getting parcels zones based on bounding area

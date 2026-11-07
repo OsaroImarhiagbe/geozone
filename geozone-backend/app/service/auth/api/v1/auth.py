@@ -12,14 +12,13 @@
 #    save_refresh_token_version,
 #    token_versioned_check,
 # )
-# from app.middleware.jwt import create_access_token, create_refresh_token, decode_token
-# from app.modules.auth.schemas.auth import (
+# from app.service.auth.schemas.auth import (
 #    LoginRequest,
 #    RegisterRequest,
 #    TokenResponse,
 # )
-# from app.modules.auth.service.auth_service import AuthService
-# from app.modules.auth.service.dependencies import get_auth_service
+# from app.service.auth.service.auth_service import AuthService
+# from app.service.auth.service.dependencies import get_auth_service
 
 # # To Do: Finish out refresh token endpoint and register user endpoint
 

@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from fastapi import status
-from passlib.context import CryptContext
+# from passlib.context import CryptContext
 
 from app.core.config import settings
 from app.service.auth.infrastructure.auth_dal.auth_dal import AuthRepositories
@@ -17,6 +17,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import uuid4
 
+import jwt
 
 
 from app.core.config import settings
@@ -24,8 +25,8 @@ from app.core.config import settings
 class AuthService:
     """ Serivce handles the authentication and autherization within the backend application"""
     
-    def __init__(self, repo:AuthRepositories, pwd_context=CryptContext(schemes=["bcrypt"]),token=settings.access_token_expire_minutes):
-        self.__pwd_context = pwd_context
+    def __init__(self, repo:AuthRepositories,token=settings.access_token_expire_minutes):
+        self.__pwd_context = None
         self.__repo = repo
         self.__token_expire_minutes = token
 
@@ -88,7 +89,7 @@ class AuthService:
         access_token_expires = timedelta(minutes=settings.access_token_expire_minutes) #ex. 15 minutes
 
         # Signing and Createing access token
-        access_token = create_access_token(
+        access_token = self.create_access_token(
             subject=user.user_id,
             role=user.role,
             email_verified=user.email_verified,
@@ -97,7 +98,7 @@ class AuthService:
         # Creating refresh token
         # Create first version of refresh token for new user
         version = 1
-        refresh_token = create_refresh_token(subject=user.user_id,ver=version) # id coming from database
+        refresh_token = self.create_refresh_token(subject=user.user_id,ver=version) # id coming from database
 
         print('JWT has been created returning to the client......')
         return TokenResponse(
