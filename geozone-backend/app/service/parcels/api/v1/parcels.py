@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status, Query
 from typing import Annotated
-from app.service.parcels.schemas.parcel_schema import (ZoningQuery, ParcelResponse)
+from app.service.parcels.schemas.parcel_schema import (ParcelQuery, ParcelResponse)
 from app.service.parcels.service.parcels_service import ParcelsService
 from app.service.parcels.service.dependencies import get_anon_parcels_service
 
@@ -32,25 +32,30 @@ router = APIRouter(tags=["parcels"])
 
 # To Do: Finish out refresh token endpoint and register user endpoint
 
-
+# filter_query: Annotated[ParcelQuery, Query()]
 get_parcels_service_dependency = Annotated[ParcelsService, Depends(get_anon_parcels_service)]
 
-@router.get('/bbox',response_model=ParcelResponse,tags=['parcels'])
-async def get_zones(service: get_parcels_service_dependency, filter_query: Annotated[ZoningQuery, Query()]) -> ParcelResponse:
+@router.get('/bbox')
+async def get_zones(service: get_parcels_service_dependency, query: Annotated[ParcelQuery, Query()],)-> Response:
     """
     Endpoint is getting parcels zones based on bounding area
     """
     try:
         
-      response = await service.parcels(min_lng=filter_query.min_lng,min_lat=filter_query.min_lat,max_lng=filter_query.max_lng,max_lat=filter_query.max_lat)
-      return response
-    except LookupError as e:
-      return HTTPException(
+      data = await service.get_parcels(query)
+      return data
+      # return ParcelResponse(
+      #    status=status.HTTP_200_OK,
+      #    error=None,
+      #    data=data
+      # )
+    except ValueError as e:
+      raise HTTPException(
        status_code=status.HTTP_404_NOT_FOUND,
        detail=str(e)
       )
     except RuntimeError:
-       return HTTPException(
+       raise HTTPException(
           status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
           detail="Internal Server Error"
        )

@@ -2,6 +2,8 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { ParcelService } from "../service/parcel";
 import axios from "axios";
 const key = process.env.NEXT_PUBLIC_MAP_BOX_KEY;
+
+const parcels = new ParcelService();
 export const useGetParcels = (
   min_lng: number,
   min_lat: number,
@@ -12,13 +14,15 @@ export const useGetParcels = (
     // Include bbox in key so query refetches when user pans/zooms
     queryKey: ["parcels", min_lng, min_lat, max_lng, max_lat],
     queryFn: async () => {
-      const response = await ParcelService.get_parcel(
+      const response = await parcels.get_parcels(
         min_lng,
         min_lat,
         max_lng,
         max_lat,
       );
-      return response.data;
+      console.log("response data", response.features);
+      console.log("response data 2:", response.type, response.features.length);
+      return response;
     },
     enabled: !!(min_lng && min_lat && max_lng && max_lat),
   });

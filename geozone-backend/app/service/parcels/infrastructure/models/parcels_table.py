@@ -6,11 +6,12 @@ from geoalchemy2 import Geometry
 from app.infrastructure.db.base_models.base import Base
 
 
-class Parcels_Table(Base):
+class Parcels(Base):
 
     __tablename__ = "parcels"
-
-    id:Mapped[UUID] = mapped_column(primary_key=True, index=True,unique=True,server_default=func.gen_random_uuid(),comment="Id of parcel") ## this is using v4 uuid
+    ogc_fid:Mapped[int] = mapped_column(primary_key=True,comment="ogc fid")
+    objectid:Mapped[int] = mapped_column(comment="object id")
+    parceltype:Mapped[str] = mapped_column(String(100),unique=False,nullable=True, comment="parcel type")
     pid:Mapped[str] = mapped_column(String(100),unique=True,nullable=True,comment="parcel id")
     map:Mapped[str] = mapped_column(String(100),nullable=True, comment="map")
     block:Mapped[str] = mapped_column(String(100),nullable=True,unique=False, comment="block")
@@ -18,7 +19,7 @@ class Parcels_Table(Base):
     lot_re:Mapped[str] = mapped_column(String(100),unique=False, nullable=True, comment="parcel lot")
     account_number:Mapped[str] = mapped_column(String(100),unique=False,nullable=True,comment="parcel account number") 
     address:Mapped[str] = mapped_column(String(100),unique=False,nullable=True, comment="address")
-    st_num:Mapped[str] = mapped_column(String(100),unique=True, nullable=True, comment="parcel st num")
+    st_num:Mapped[str] = mapped_column(String(100),unique=False, nullable=True, comment="parcel st num")
     st_alpha:Mapped[str] = mapped_column(String(100),unique=False,nullable=True, comment="st_aplha")
     st_name:Mapped[str] = mapped_column(String(100), unique=False, nullable=True, comment="st_name")
     st_type:Mapped[str] = mapped_column(String(100), unique=False, nullable=True, comment="st_type")

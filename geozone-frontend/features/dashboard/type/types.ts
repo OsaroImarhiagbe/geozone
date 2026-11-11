@@ -1,22 +1,33 @@
-type geomotry = {
-  type: string;
-  coordinates: number[][];
-};
-type parcelproperties = {
-  pid: number;
-  address: string;
-  zone_code: string;
-  land_desc: string;
-  land_sf: number;
-};
-interface ParcelFeature {
-  geometry: geomotry;
-  propertiers: parcelproperties;
+// types/parcels.ts
+export interface ParcelProperties {
+  pid: string | null;
+  address: string | null;
+  zone_code: string | null;
+  land_desc: string | null;
+  land_sf: number | null;
 }
 
-export interface ParcelResponse {
-  type: string;
+export type ParcelGeometry =
+  | { type: "Polygon"; coordinates: number[][][] }
+  | { type: "MultiPolygon"; coordinates: number[][][][] };
+
+export interface ParcelFeature {
+  type: "Feature";
+  properties: ParcelProperties;
+  geometry: ParcelGeometry;
+}
+
+export interface ParcelFeatureCollection {
+  type: "FeatureCollection";
+  name: string;
   features: ParcelFeature[];
+}
+
+export interface BBox {
+  minLng: number;
+  minLat: number;
+  maxLng: number;
+  maxLat: number;
 }
 
 export interface Bounding {

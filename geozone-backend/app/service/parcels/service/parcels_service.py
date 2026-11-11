@@ -1,6 +1,9 @@
 from app.service.parcels.infrastructure.parcels.parcels_dal import ParcelsRepository
-from app.service.parcels.schemas.parcel_schema import ParcelResponse, ParcelFeatureCollection
+from app.service.parcels.schemas.parcel_schema import (ParcelFeature, ParcelFeatureCollection,ParcelProperties,ParcelQuery)
+
 from fastapi import status
+
+from pprint import pprint
 
 class ParcelsService:
     """
@@ -10,21 +13,20 @@ class ParcelsService:
     def __init__(self,repo: ParcelsRepository):
         self.__repo = repo
 
-    async def parcels(self,min_lng: float,min_lat: float,max_lng: float,max_lat: float) -> ParcelResponse:
+    async def get_parcels(self,bbox:ParcelQuery) -> str:
         """
         Service Layer Function for grabbing parcels based off the bounding box
         """
-        response = await self.__repo.find_parcels_by_bbox(min_lng=min_lng,min_lat=min_lat,max_lng=max_lng,max_lat=max_lat)
+        features = await self.__repo.get_parcels_geojson(bbox)
 
-        if response is None:
-            raise LookupError
+        if not features:
+            raise ValueError
 
-        print("parcel service response:", response)
-        return ParcelResponse(
-            status=status.HTTP_200_OK,
-            error="",
-            data=ParcelFeatureCollection(
-                type="FeatureCollection",
-                features=response
-            )
-            )
+        
+        return features
+
+    # ParcelFeatureCollection(
+    #             type="FeatureCollection",
+    #             name="RealEstate_Parcels",
+    #             features=features
+    #         )

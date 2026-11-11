@@ -2,8 +2,9 @@ import axios from "axios";
 
 import type { ApiResponse } from "./types/type";
 import { useTokenStore } from "@/api/store/useTokenStore";
+
 const apiClient = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: process.env.GEOZONE_BACKEND_URL || "http://localhost:8000/api/v1",
   timeout: 10_000,
   withCredentials: true, // sends your httpOnly refresh token cookie automatically
   headers: {

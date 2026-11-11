@@ -1,36 +1,80 @@
 from pydantic import BaseModel
-from typing import Literal
-from pydantic import BaseModel
+from typing import Literal,Optional,Annotated
+from pydantic import BaseModel,Field, ConfigDict
 
-class ZoningQuery(BaseModel):
-    min_lng: float
-    min_lat: float
-    max_lng: float
-    max_lat: float
+class ParcelQuery(BaseModel):
+    min_lng: float | None = None
+    min_lat: float | None = None
+    max_lng: float | None = None
+    max_lat: float | None = None
+
+    @property
+    def has_bbox(self) -> bool:
+        return None not in (self.min_lng, self.min_lat, self.max_lng, self.max_lat)
 
 
 
-class ParcelGeometry(BaseModel):
+class PolygonGeometry(BaseModel):
     type: Literal["Polygon"]
     coordinates: list[list[list[float]]]  # [[[lng, lat], [lng, lat], ...]]
 
 
+class MultiPolygonGeometry(BaseModel):
+    type: Literal["MultiPolygon"]
+    coordinates: list[list[list[list[float]]]]
+
+
+ParcelGeometry = Annotated[
+    PolygonGeometry | MultiPolygonGeometry, Field(discriminator="type")
+]
+
+
 class ParcelProperties(BaseModel):
-    pid: int
-    address: str
-    zone_code: str
-    land_desc: str
-    land_sf: float
+    model_config = ConfigDict(from_attributes=True)
+
+    objectid:int | None = None
+    parceltype: str | None = None
+    pid:str | None = None
+    map:str | None = None
+    block:str | None = None
+    lot_gis:str | None = None
+    lot_re:str  | None = None
+    account_number:str  | None = None
+    address:str | None = None 
+    st_num:str | None = None
+    st_alpha:str  | None = None
+    st_name:str | None = None
+    st_type:str | None = None 
+    unit:str | None = None 
+    plat:str | None = None 
+    legal_lot:str | None = None 
+    status:str | None = None 
+    land_code:str | None = None 
+    land_desc:str | None = None 
+    prp_name:str | None = None
+    zone_code:str | None = None 
+    neighborho:str| None = None 
+    land_sf:float | None = None 
+    own_name:str | None = None 
+    owner_name_2:str | None = None
+    own_add:str | None = None 
+    own_add_2:str | None = None 
+    own_city:str | None = None
+    own_stat:str | None = None
+    own_zip:str | None = None 
+    instrument:str | None = None
 
 
 class ParcelFeature(BaseModel):
     type: Literal["Feature"]
-    geometry: ParcelGeometry
     properties: ParcelProperties
+    geometry: ParcelGeometry
+   
 
 
 class ParcelFeatureCollection(BaseModel):
     type: Literal["FeatureCollection"]
+    name:str
     features: list[ParcelFeature]
 
 class ParcelResponse(BaseModel):
