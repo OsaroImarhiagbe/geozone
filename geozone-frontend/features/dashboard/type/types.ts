@@ -40,3 +40,19 @@ export interface Bounding {
   setMaxLng: (max_lng: number) => void;
   setMaxLat: (max_lat: number) => void;
 }
+
+// features/dashboard/type/analysis.ts
+export type SelectedParcel = {
+  pid: string;
+  address?: string;
+  zone_code?: string;
+  land_desc?: string;
+  land_sf?: number;
+};
+
+export type ParcelAnalysis = {
+  summary: string;
+  opportunities: string[];
+  constraints: string[];
+  nextSteps: string[];
+};

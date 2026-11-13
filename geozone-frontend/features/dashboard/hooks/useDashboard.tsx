@@ -1,6 +1,13 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { ParcelService } from "../service/parcel";
 import axios from "axios";
+
+// features/dashboard/hooks/useParcelAnalysis.ts
+import type {
+  ParcelAnalysis,
+  SelectedParcel,
+} from "@/features/dashboard/type/types";
+
 const key = process.env.NEXT_PUBLIC_MAP_BOX_KEY;
 
 const parcels = new ParcelService();
@@ -39,3 +46,20 @@ export const useGetLocation = () => {
     },
   });
 };
+
+export function useParcelAnalysis() {
+  return useMutation<ParcelAnalysis, Error, SelectedParcel[]>({
+    mutationFn: async (parcels) => {
+      const res = await fetch("/api/parcel-analysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ parcels }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error ?? "Analysis failed. Try again.");
+      }
+      return res.json();
+    },
+  });
+}

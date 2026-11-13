@@ -127,3 +127,51 @@
     @apply font-sans;
   }
 }
+/* Append to your global CSS (e.g. app/globals.css). Remove the old .grid-overlay rule. */
+.space-bg {
+  background-color: #060a11;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 64% 42%, rgba(255, 255, 255, 0.22), transparent),
+    radial-gradient(1px 1px at 38% 76%, rgba(255, 255, 255, 0.28), transparent),
+    radial-gradient(1px 1px at 86% 12%, rgba(255, 255, 255, 0.25), transparent);
+  background-size:
+    420px 420px,
+    560px 560px,
+    680px 680px,
+    500px 500px;
+}
+@keyframes telemetry-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.telemetry-dot {
+  animation: telemetry-pulse 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .telemetry-dot {
+    animation: none;
+  }
+}
+@keyframes telemetry-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.telemetry-dot {
+  animation: telemetry-pulse 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .telemetry-dot {
+    animation: none;
+  }
+}
