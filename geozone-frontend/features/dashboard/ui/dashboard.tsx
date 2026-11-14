@@ -4,12 +4,12 @@ import Map from "@/features/dashboard/components/map";
 // import RecentAOI from "@/features/dashboard/components/recent-aoi";
 import AOISummary from "@/features/dashboard/components/aoi-summary";
 import QuickAction from "@/features/dashboard/components/quick-action";
-import ParcelAIAnalysis from "../components/ai-analysis";
+// import ParcelAIAnalysis from "../components/ai-analysis";
 
 export default function DashboardScreen() {
   return (
-    <section className="space-bg relative min-h-screen text-slate-200">
-      <div className="relative mx-auto w-full max-w-[1700px] space-y-4 p-4 lg:p-6">
+    <section className="space-bg relative flex min-h-screen w-full flex-col text-slate-200">
+      <div className="flex w-full flex-1 flex-col gap-4 p-4 lg:p-6">
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -42,15 +42,14 @@ export default function DashboardScreen() {
           />
         </section>
 
-        {/* Main workspace: map is the hero */}
-        <section className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+        {/* Main workspace: fills all remaining height; map is the hero */}
+        <section className="grid min-h-[620px] min-w-0 flex-1 grid-rows-[minmax(0,1fr)] gap-4 xl:grid-cols-[minmax(0,1fr)_clamp(380px,26vw,480px)]">
           <Map />
-          <div className="min-w-0 xl:h-[calc(100vh-260px)] xl:min-h-[680px]">
-            {/* <AOISummary /> */}
-            <ParcelAIAnalysis />
+          <div className="min-h-0 min-w-0 overflow-y-auto">
+            <AOISummary />
+            {/* <ParcelAIAnalysis /> */}
           </div>
         </section>
-
         {/* <RecentAOI /> */}
       </div>
     </section>

@@ -2,7 +2,7 @@
 
 # 🛡️ GeoZone
 
-### A geospaital analysis platform designed to help users explore, analyze and understand areas of interests.
+### A geospaital analysis platform designed to help users explore, analyze and understand zoning in Alexandria, VA
 
 [![Status](https://img.shields.io/badge/status-active%20development-brightgreen?style=flat-square)](https://github.com/yourusername/collabai)
 [![Backend](https://img.shields.io/badge/backend-FastAPI-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -111,7 +111,7 @@ geozoning/
 ### System Diagram
 
 **MVP Diagram**
-![GeoZone System Diagram](image.png)
+![GeoZone System Diagram](systemdesign.png)
 
 ---
 
