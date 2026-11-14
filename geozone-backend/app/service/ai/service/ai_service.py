@@ -21,4 +21,5 @@ class AIService:
     def __init__(self):
         pass
 
-    
+    async def get_parcel_analysis(self):
+        pass
