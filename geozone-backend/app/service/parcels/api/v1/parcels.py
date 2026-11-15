@@ -42,7 +42,7 @@ async def get_zones(service: get_parcels_service_dependency, query: Annotated[Pa
     """
     try:
         
-      data = await service.get_parcels(query)
+      data = await service.getParcels(query)
       return data
       # return ParcelResponse(
       #    status=status.HTTP_200_OK,

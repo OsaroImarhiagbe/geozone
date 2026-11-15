@@ -22,4 +22,7 @@ class AIService:
         pass
 
     async def get_parcel_analysis(self):
+        """
+        Service layer function makes external API call to Claude LLM API
+        """
         pass

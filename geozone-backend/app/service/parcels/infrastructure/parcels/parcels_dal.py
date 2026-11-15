@@ -46,3 +46,20 @@ class ParcelsRepository:
             params.update(bbox.model_dump())
         result = await self.__db.execute(sql, params)
         return result.scalar_one()
+
+    async def get_parcel_by_id(self,parcel_id:str) -> str:
+
+        sql = text(f"""
+
+            SELECT pid
+            FROM parcels
+            WHERE pid = :parcel_id
+        """)
+
+        result = await self.__db.execute(sql,{"pid":parcel_id})
+
+
+
+        return result.scalar_one_or_none()
+
+        

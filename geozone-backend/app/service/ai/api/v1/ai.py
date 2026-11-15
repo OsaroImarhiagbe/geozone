@@ -36,14 +36,15 @@ router = APIRouter(tags=["ai"])
 get_parcels_service_dependency = Annotated[ParcelsService, Depends(get_anon_parcels_service)]
 
 @router.post('/{parcel_id}/analysis')
-async def get_analysis(ai_service: get_parcels_service_dependency, query: Annotated[ParcelQuery, Query()],)-> Response:
+async def get_analysis(parcel_id:str,parcel_service: get_parcels_service_dependency, query: Annotated[ParcelQuery, Query()],)-> Response:
     """
     Endpoint is getting parcels zones based on bounding area
     """
     try:
-        
-      data = await ai_service.get_parcels(query)
-      return data
+
+      # First grab the parcel by the parcel id from parcel table
+      parcelId = await parcel_service.get_parcel_by_id(parcel_id)
+      return
       # return ParcelResponse(
       #    status=status.HTTP_200_OK,
       #    error=None,

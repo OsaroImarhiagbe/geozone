@@ -2,6 +2,13 @@ from pydantic import BaseModel
 from typing import Literal,Optional,Annotated
 from pydantic import BaseModel,Field, ConfigDict
 
+ParcelIdStr = Annotated[str, Field(pattern=r"^\d{3}\.\d{2}-\d{2}-\d{2}(?:\.\d+)?$")]
+
+
+class ParcelIDParameter(BaseModel):
+    parcel_id:ParcelIdStr
+
+    
 class ParcelQuery(BaseModel):
     min_lng: float | None = None
     min_lat: float | None = None

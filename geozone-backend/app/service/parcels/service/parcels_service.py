@@ -1,5 +1,5 @@
 from app.service.parcels.infrastructure.parcels.parcels_dal import ParcelsRepository
-from app.service.parcels.schemas.parcel_schema import (ParcelFeature, ParcelFeatureCollection,ParcelProperties,ParcelQuery)
+from app.service.parcels.schemas.parcel_schema import (ParcelQuery,ParcelIdStr)
 
 from fastapi import status
 
@@ -13,20 +13,36 @@ class ParcelsService:
     def __init__(self,repo: ParcelsRepository):
         self.__repo = repo
 
-    async def get_parcels(self,bbox:ParcelQuery) -> str:
+    async def getParcels(self,bbox:ParcelQuery) -> str:
         """
         Service Layer Function for grabbing parcels based off the bounding box
         """
         features = await self.__repo.get_parcels_geojson(bbox)
 
         if not features:
-            raise ValueError
+            raise ValueError("Feature not found")
 
-        
-        return features
-
-    # ParcelFeatureCollection(
+            # ParcelFeatureCollection(
     #             type="FeatureCollection",
     #             name="RealEstate_Parcels",
     #             features=features
     #         )
+        
+        return features
+
+    async def get_parcel_by_id(self,parcel_id:str) -> str:
+        """
+        Service layer function to grab a parcel by the its pid (parcel_id)
+        """
+
+        if not ParcelIdStr(parcel_id=parcel_id):
+            raise ValueError(f"{parcel_id} is invlaid format")
+        # Add a logger here
+
+        parcelId = await self.__repo.get_parcel_by_id(parcel_id)
+
+        if parcelId is None:
+            raise ValueError(f"{parcel_id} not found!")
+        ## I think add a logger here
+
+        return parcelId
