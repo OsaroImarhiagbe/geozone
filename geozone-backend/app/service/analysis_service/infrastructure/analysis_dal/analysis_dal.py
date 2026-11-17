@@ -1,10 +1,10 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.service.auth.infrastructure.models.auth_table import Auth_Credentials
+from app.service.auth.infrastructure.postgresql_models.auth_table import Auth_Credentials
 
 
-class AuthRepositories:
+class AnalysisRepository:
     """
     Auth Service Data Acces Layer
     """

@@ -3,8 +3,8 @@ from sqlalchemy import select,func, text
 
 from geoalchemy2.functions import ST_Intersects, ST_MakeEnvelope
 
-from app.service.parcels.infrastructure.models.parcels_table import Parcels
-from app.service.parcels.schemas.parcel_schema import (ParcelFeature,ParcelQuery)
+from app.service.parcels_service.infrastructure.models.parcels_table import Parcels
+from app.service.parcels_service.schemas.parcel_schema import (ParcelFeature,ParcelQuery)
 
 from pprint import pprint
 

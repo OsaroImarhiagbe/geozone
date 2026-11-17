@@ -1,5 +1,5 @@
-from app.service.parcels.infrastructure.parcels.parcels_dal import ParcelsRepository
-from app.service.parcels.schemas.parcel_schema import (ParcelQuery,ParcelIdStr)
+from app.service.parcels_service.infrastructure.parcels.parcels_dal import ParcelsRepository
+from app.service.parcels_service.schemas.parcel_schema import (ParcelQuery,ParcelIdStr)
 
 from fastapi import status
 
@@ -39,6 +39,7 @@ class ParcelsService:
             raise ValueError(f"{parcel_id} is invlaid format")
         # Add a logger here
 
+        # grab the parcel by the id and return it
         parcelId = await self.__repo.get_parcel_by_id(parcel_id)
 
         if parcelId is None:
@@ -46,3 +47,11 @@ class ParcelsService:
         ## I think add a logger here
 
         return parcelId
+
+    async def get_parcel_metrics(self,parcel_id:str):
+
+        # step 1: grab the parcel by the
+        parcelID = await self.get_parcel_by_id(parcel_id=parcel_id)
+
+        #step 2: get metrics for parcel
+        
