@@ -12,4 +12,5 @@ dependencies = [
     "pwdlib[argon2]>=0.3.1",
     "pyjwt>=2.15.1",
     "sqlalchemy[asyncio]>=2.1.1",
+    "structlog>=26.1.0",
 ]

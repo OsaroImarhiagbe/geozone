@@ -30,7 +30,7 @@ class ParcelsRepository:
                     json_build_object(
                         'type', 'Feature',
                         'properties', json_build_object(
-                            'pid', pid, 'address', address, 'zone_code', zone_code,
+                            'parcel_id','pid', pid, 'address', address, 'zone_code', zone_code,
                             'land_desc', land_desc, 'land_sf', land_sf
                         ),
                         'geometry', ST_AsGeoJSON(geometry, 6)::json
@@ -49,9 +49,10 @@ class ParcelsRepository:
 
     async def get_parcel_by_id(self,parcel_id:str) -> str:
 
-        sql = text(f"""
 
-            SELECT pid
+        sql = text("""
+
+            SELECT parcel_id
             FROM parcels
             WHERE pid = :parcel_id
         """)
@@ -62,4 +63,35 @@ class ParcelsRepository:
 
         return result.scalar_one_or_none()
 
+    async def get_parcel_metric(self,parcel_id:str):
+        sql = text("""
+                   SELECT
+                        p.id,
+                        p.zone_code,
+                        ST_Area(p.geom) AS lot_area,
+                        hd.name  AS height_district,
+                        hist.name AS historic_district,
+                        pk.name  AS parking_district
+                        FROM parcels p
+                        LEFT JOIN LATERAL (
+                        SELECT name FROM height_districts h
+                        WHERE ST_Intersects(h.geom, p.geom)
+                        LIMIT 1
+                        ) hd ON true
+                        LEFT JOIN LATERAL (
+                        SELECT name FROM historic_districts h
+                        WHERE ST_Intersects(h.geom, p.geom)
+                        LIMIT 1
+                        ) hist ON true
+                        LEFT JOIN LATERAL (
+                        SELECT name FROM parking_districts k
+                        WHERE ST_Intersects(k.geom, p.geom)
+                        LIMIT 1
+                        ) pk ON true
+                        WHERE p.id = :parcel_id;
+                   """)
+        result = await self.__db.execute(sql,{"pid":parcel_id})
+
+        return result.scalar_one_or_none()
+        
         

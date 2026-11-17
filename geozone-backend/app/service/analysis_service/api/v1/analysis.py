@@ -19,7 +19,7 @@ router = APIRouter(tags=["parcel_analyzer"])
 # filter_query: Annotated[ParcelQuery, Query()]
 get_analysis_service_dependency = Annotated[AnalysisService, Depends(get_auth_analysis_service)]
 
-@router.post('/parcels/analysis')
+@router.post('/parcels')
 async def generate_analysis(request:AnalysisRequest,analysis_service: get_analysis_service_dependency):
     """
     Endpoint is getting parcels zones based on bounding area

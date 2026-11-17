@@ -30,7 +30,7 @@ class ParcelsService:
         
         return features
 
-    async def get_parcel_by_id(self,parcel_id:str) -> str:
+    async def get_parcel_by_id(self,parcel_id:str):
         """
         Service layer function to grab a parcel by the its pid (parcel_id)
         """
@@ -53,5 +53,13 @@ class ParcelsService:
         # step 1: grab the parcel by the
         parcelID = await self.get_parcel_by_id(parcel_id=parcel_id)
 
-        #step 2: get metrics for parcel
+        #step 2: grab zoning,heights, historic,and parking metrics compare them with parcel coorindates
+        metric = await self.__repo.get_parcel_metric(parcel_id=parcelID)
+
+        # step 3: transform result into correct data format
+        if metric is None:
+            raise ValueError(f"{parcel_id} metric could not be compunded!")
+
+        # loop over result and transform
+
         

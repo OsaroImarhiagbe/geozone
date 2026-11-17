@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import UUID
-from sqlalchemy import DateTime, String, func, Float
+from sqlalchemy import DateTime, String, func, Float, text
 from sqlalchemy.orm import Mapped, mapped_column
 from geoalchemy2 import Geometry
 from app.infrastructure.db.base_models.base import Base
@@ -9,10 +9,11 @@ from app.infrastructure.db.base_models.base import Base
 class Parcels(Base):
 
     __tablename__ = "parcels"
-    ogc_fid:Mapped[int] = mapped_column(primary_key=True,comment="ogc fid")
+    parcel_id:Mapped[UUID] = mapped_column( primary_key=True, index=True,unique=True,server_default=text("gen_random_uuid()"),doc="parcel id",comment="Id of parcel")
+    ogc_fid:Mapped[int] = mapped_column(comment="ogc fid")
     objectid:Mapped[int] = mapped_column(comment="object id")
     parceltype:Mapped[str] = mapped_column(String(100),unique=False,nullable=True, comment="parcel type")
-    pid:Mapped[str] = mapped_column(String(100),unique=True,nullable=True,comment="parcel id")
+    pid:Mapped[str] = mapped_column(String(100),unique=True,nullable=True,comment="parcel id",)
     map:Mapped[str] = mapped_column(String(100),nullable=True, comment="map")
     block:Mapped[str] = mapped_column(String(100),nullable=True,unique=False, comment="block")
     lot_gis:Mapped[str] = mapped_column( String(100),unique=False,nullable=True, comment="parcel lot gis")

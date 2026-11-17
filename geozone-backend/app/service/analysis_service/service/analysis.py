@@ -21,7 +21,7 @@ class AnalysisService:
         # if parcel id is not valid raise error
         if not ParcelIdStr(parcel_id=parcel.pid):
             return ValueError(f"{parcel.pid} is not a valid format")
-        # we cna add a logger here
+        # we can add a logger here
 
         result = await self.__parcel_service.get_parcel_metrics(parcel_id=parcel.pid)
 
