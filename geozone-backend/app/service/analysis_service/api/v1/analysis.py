@@ -8,10 +8,30 @@ from app.service.analysis_service.api.dependencies.dependencies import get_auth_
 from fastapi import APIRouter, Depends, HTTPException
 from app.service.analysis_service.schemas.analysis_schema import (AnalysisRequest, GenerateRequest, GenerateResponse)
 
+# app/api/v1/analysis.py
+from functools import lru_cache
 
-router = APIRouter(tags=["parcel_analyzer"])
+from fastapi import APIRouter, Depends, HTTPException
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.ai.config import AIConfig
+from app.ai.llm_client import LLMClient
+from app.service.analysis_service.schemas.analysis_schema import (AnalysisRequest, AnalysisResponse, ErrorResponse)
 
 
+router = APIRouter(tags=["analysis"])
+
+
+# @lru_cache
+# def get_ai_config() -> AIConfig:
+#     return AIConfig()
+
+
+# @lru_cache
+# def get_llm_client() -> LLMClient:
+#     # One client per process: reuses the HTTP connection pool
+#     return LLMClient(get_ai_config())
 
 
 # To Do: Finish out refresh token endpoint and register user endpoint
@@ -20,12 +40,13 @@ router = APIRouter(tags=["parcel_analyzer"])
 get_analysis_service_dependency = Annotated[AnalysisService, Depends(get_auth_analysis_service)]
 
 @router.post('/parcels')
-async def generate_analysis(request:AnalysisRequest,analysis_service: get_analysis_service_dependency):
+async def generate_analysis(
+    request:AnalysisRequest,
+    analysis_service: get_analysis_service_dependency):
     """
     Endpoint is getting parcels zones based on bounding area
     """
     try:
-
       # send parcel_id to analysis service
       data = await analysis_service.generate_analysis_by_parcel_id(parcel=request)
       return
@@ -45,11 +66,30 @@ async def generate_analysis(request:AnalysisRequest,analysis_service: get_analys
           detail="Internal Server Error"
        )
 
+@router.post("/parcels/{parcel_id}/analysis",response_model=AnalysisResponse,responses={404: {"model": ErrorResponse}, 502: {"model": ErrorResponse}},)
+async def analyze_parcel(
+    parcel_id: int,
+    body: AnalysisRequest | None = None,
+    _user=Depends(get_current_user),  # auth gate; analysis itself is not user-scoped
+    service: AnalysisService = Depends(get_analysis_service),
+) -> AnalysisResponse:
+    persona = (body or AnalysisRequest()).persona
 
+    try:
+        result = await service.analyze(parcel_id, persona)
+    except AnalysisGenerationError:
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "error": "llm_unavailable",
+                "message": "The analysis service is temporarily unavailable. Try again shortly.",
+                "retry_after": 30,
+            },
+        )
 
-# @router.post("/generate", response_model=GenerateResponse)
-# async def generate_completion(request: GenerateRequest,gateway: LlmGateway = Depends(get_llm_gateway),) -> GenerateResponse:
-#     try:
-#         return await gateway.generate(request)
-#     except ValueError as exc:
-#         raise HTTPException(status_code=400, detail=str(exc))
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "parcel_not_found", "message": "Parcel not found."},
+        )
+    return result

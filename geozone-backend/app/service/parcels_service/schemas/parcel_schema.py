@@ -88,3 +88,16 @@ class ParcelResponse(BaseModel):
     status:int
     error:str | None = None
     data: ParcelFeatureCollection
+
+
+class ParcelOverlayRow(BaseModel):
+    """One row returned by the parcel + overlay lookup query."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int                              # p.id (never null: it's the WHERE key)
+    zone_code: str | None = None         # p.zone_code
+    lot_area: float | None = None        # ST_Area(p.geom)
+    height_district: str | None = None   # hd.name, NULL if no intersecting polygon
+    historic_district: str | None = None # hist.name, NULL if no intersecting polygon
+    parking_district: str | None = None  # pk.name, NULL if no intersecting polygon

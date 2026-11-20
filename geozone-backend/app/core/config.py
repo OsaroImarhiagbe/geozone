@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     redis_port:int
     redis_password:SecretStr
 
-    #postgres db
+    #Postgres db
     postgresql_port:int
     alembic_postgres_user: str
     
@@ -35,6 +35,21 @@ class Settings(BaseSettings):
     postgres_password: SecretStr
     postgres_db:str
     postgres_host:str
+
+    ## Claude API Settings
+    api_key: str
+    model: str = "claude-sonnet-5-5"  # confirm against your provider's current model list
+    max_tokens: int = 4000
+    timeout_seconds: float = 60.0
+
+    ordinance_version: str = "unset"
+    prompt_version: str = "v1"
+
+    # Hard cap on ordinance text sent per request (characters, ~4 chars/token)
+    ordinance_char_budget: int = 24_000
+    
+    # CACHE_PREFIX = "geozone:analysis"
+    # CACHE_TTL_SECONDS = 60 * 60 * 24  # move to settings; unviewed analyses expire
 
     # Alembic Database url -> Root User
     def alembic_database_url_sync(self) -> str:

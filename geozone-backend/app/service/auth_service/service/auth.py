@@ -4,8 +4,8 @@ from fastapi import status
 # from passlib.context import CryptContext
 
 from app.core.config import settings
-from app.service.auth.infrastructure.auth_dal.auth_dal import AuthRepositories
-from app.service.auth.schemas.auth import (
+from app.service.auth_service.infrastructure.auth_dal.auth_dal import AuthRepositories
+from app.service.auth_service.schemas.auth_schema import (
     LoginRequest,
     RegisterRequest,
     Token,

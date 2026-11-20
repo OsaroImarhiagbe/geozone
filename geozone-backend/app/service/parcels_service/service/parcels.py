@@ -1,5 +1,5 @@
-from app.service.parcels_service.infrastructure.parcels.parcels_dal import ParcelsRepository
-from app.service.parcels_service.schemas.parcel_schema import (ParcelQuery,ParcelIdStr)
+from app.service.parcels_service.infrastructure.parcels_dal.postgresql.parcels_dal import ParcelsRepository
+from app.service.parcels_service.schemas.parcel_schema import (ParcelQuery,ParcelIdStr,ParcelOverlayRow)
 
 from fastapi import status
 
@@ -48,7 +48,7 @@ class ParcelsService:
 
         return parcelId
 
-    async def get_parcel_metrics(self,parcel_id:str):
+    async def get_parcel_metrics(self,parcel_id:str) -> ParcelOverlayRow:
 
         # step 1: grab the parcel by the
         parcelID = await self.get_parcel_by_id(parcel_id=parcel_id)
@@ -61,5 +61,7 @@ class ParcelsService:
             raise ValueError(f"{parcel_id} metric could not be compunded!")
 
         # loop over result and transform
+        return metric
+
 
         

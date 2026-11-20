@@ -1,14 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select,func, text
+from sqlalchemy import text
 
 from geoalchemy2.functions import ST_Intersects, ST_MakeEnvelope
 
-from app.service.parcels_service.infrastructure.models.parcels_table import Parcels
-from app.service.parcels_service.schemas.parcel_schema import (ParcelFeature,ParcelQuery)
+from app.service.parcels_service.schemas.parcel_schema import (ParcelQuery,ParcelOverlayRow)
 
-from pprint import pprint
 
-import json
 
 class ParcelsRepository:
     def __init__(self, db: AsyncSession):
@@ -30,7 +27,7 @@ class ParcelsRepository:
                     json_build_object(
                         'type', 'Feature',
                         'properties', json_build_object(
-                            'parcel_id','pid', pid, 'address', address, 'zone_code', zone_code,
+                            'pid', pid, 'address', address, 'zone_code', zone_code,
                             'land_desc', land_desc, 'land_sf', land_sf
                         ),
                         'geometry', ST_AsGeoJSON(geometry, 6)::json
@@ -48,7 +45,9 @@ class ParcelsRepository:
         return result.scalar_one()
 
     async def get_parcel_by_id(self,parcel_id:str) -> str:
-
+        """
+        Grab a parcel by its id and return.
+        """
 
         sql = text("""
 
@@ -59,11 +58,10 @@ class ParcelsRepository:
 
         result = await self.__db.execute(sql,{"pid":parcel_id})
 
-
-
+        ## may need to loop to get results
         return result.scalar_one_or_none()
 
-    async def get_parcel_metric(self,parcel_id:str):
+    async def get_parcel_metric(self,parcel_id:str) -> ParcelOverlayRow:
         sql = text("""
                    SELECT
                         p.id,

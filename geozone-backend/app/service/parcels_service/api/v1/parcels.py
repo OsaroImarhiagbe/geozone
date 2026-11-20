@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status, Query
 from typing import Annotated
-from app.service.parcels.schemas.parcel_schema import (ParcelQuery, ParcelResponse)
-from app.service.parcels.service.parcels_service import ParcelsService
-from app.service.parcels.service.dependencies import get_anon_parcels_service
+from app.service.parcels_service.schemas.parcel_schema import (ParcelQuery, ParcelResponse)
+from app.service.parcels_service.service.parcels import ParcelsService
+from app.service.parcels_service.service.dependencies import get_anon_parcels_service
 
 
 router = APIRouter(tags=["parcels"])

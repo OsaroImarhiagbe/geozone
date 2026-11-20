@@ -8,7 +8,7 @@ from geoalchemy2 import alembic_helpers
 from alembic import context
 from app.core.config import settings
 from app.infrastructure.db.base_models.base import Base
-from app.service.parcels.infrastructure.models.parcels_table import Parcels_Table
+from app.service.parcels_service.infrastructure.models.parcels_table import Parcels
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import Boolean, DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.service.auth.schemas.auth import Email_Verified, Role
+from app.service.auth_service.schemas.auth_schema import Email_Verified, Role
 from app.infrastructure.db.base_models.base import Base
 
 

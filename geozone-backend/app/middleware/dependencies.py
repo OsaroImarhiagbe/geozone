@@ -5,8 +5,8 @@ from fastapi.security import OAuth2PasswordBearer
 from pydantic import ValidationError
 
 from app.core.config import settings
-from app.service.auth.schemas.auth import TokenPayload
-from app.service.auth.service.auth_service import AuthService
+from app.service.auth_service.schemas.auth_schema import TokenPayload
+from app.service.auth_service.service.auth import AuthService
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.api_v1_str}/auth/login")

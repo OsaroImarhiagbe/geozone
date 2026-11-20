@@ -49,12 +49,12 @@ export default function Map() {
 
   const selectedPids = useMemo(() => parcels.map((p) => p.pid), [parcels]);
 
-  // const { data: parcelData } = useGetParcels(
-  //   min_lng,
-  //   min_lat,
-  //   max_lng,
-  //   max_lat,
-  // );
+  const { data: parcelData } = useGetParcels(
+    min_lng,
+    min_lat,
+    max_lng,
+    max_lat,
+  );
 
   // const params = new URLSearchParams(searchParams.toString());
 
@@ -188,13 +188,13 @@ export default function Map() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 2. Push fetched data into the source
-  // useEffect(() => {
-  //   const map = mapRef.current;
-  //   if (!map || !mapLoaded || !parcelData) return;
-  //   (
-  //     map.getSource("alexandria") as mapboxgl.GeoJSONSource | undefined
-  //   )?.setData(parcelData);
-  // }, [parcelData, mapLoaded]);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapLoaded || !parcelData) return;
+    (
+      map.getSource("alexandria") as mapboxgl.GeoJSONSource | undefined
+    )?.setData(parcelData);
+  }, [parcelData, mapLoaded]);
 
   useEffect(() => {
     const map = mapRef.current;

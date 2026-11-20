@@ -4,8 +4,8 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.infrastructure.db.dependecies import ( get_anon_db, get_auth_db)
-from app.service.parcels.infrastructure.parcels.parcels_dal import ParcelsRepository
-from app.service.parcels.service.parcels_service import ParcelsService
+from app.service.parcels_service.infrastructure.parcels.parcels_dal import ParcelsRepository
+from app.service.parcels_service.service.parcels import ParcelsService
 from app.middleware.dependencies import get_authenticated_user
 
 
